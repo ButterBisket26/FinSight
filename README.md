@@ -5,7 +5,7 @@ FinSight is a production-ready Telegram bot that provides AI-generated insights 
 ## Features
 
 - 📊 **Real-time Stock Metrics**: Scrapes comprehensive financial data from Screener.in
-- 🤖 **AI-Powered Insights**: Uses OpenAI GPT-4o-mini to generate bullish/bearish insights
+- 🤖 **AI-Powered Insights**: Uses Gemini to generate bullish/bearish insights
 - 📈 **Sentiment Analysis**: Provides overall sentiment (Positive/Neutral/Negative)
 - 💡 **Actionable Summaries**: 4-line actionable investment summaries
 - 🔍 **Easy to Use**: Simply send a stock name or symbol to get instant analysis
@@ -41,7 +41,7 @@ FinSight is a production-ready Telegram bot that provides AI-generated insights 
 3. Copy the bot token provided
 
 ### OpenAI API Key
-1. Go to [OpenAI Platform](https://platform.openai.com)
+1. Go to [Google AI Studio Platform](https://aistudio.google.com/app/api-keys)
 2. Sign up or log in
 3. Navigate to API Keys section
 4. Create a new API key
@@ -129,8 +129,7 @@ The AI analysis includes:
 ## Configuration
 
 You can modify the AI model in `ai_insights.py`:
-- Default: `gpt-4o-mini` (cost-effective)
-- Alternative: `gpt-4o` (better quality, higher cost)
+- Default: `gemini-2.0-flash-lite` 
 
 ## Error Handling
 
@@ -170,4 +169,5 @@ This project is provided as-is for educational and personal use.
 ## Disclaimer
 
 This bot is for informational purposes only. It does not provide financial advice. Always consult with a qualified financial advisor before making investment decisions.
+
 
