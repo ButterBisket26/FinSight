@@ -9,7 +9,7 @@ def test_environment():
     print("Testing environment setup...")
     
     telegram_token = os.getenv("TELEGRAM_BOT_TOKEN")
-    openai_key = os.getenv("OPENAI_API_KEY")
+    groq_key = os.getenv("GROQ_API_KEY")
     
     if not telegram_token:
         print("❌ TELEGRAM_BOT_TOKEN not found in .env file")
@@ -17,11 +17,11 @@ def test_environment():
     else:
         print("✅ TELEGRAM_BOT_TOKEN found")
     
-    if not openai_key:
-        print("❌ OPENAI_API_KEY not found in .env file")
+    if not groq_key:
+        print("❌ GROQ_API_KEY not found in .env file")
         return False
     else:
-        print("✅ OPENAI_API_KEY found")
+        print("✅ GROQ_API_KEY found")
     
     return True
 
@@ -33,8 +33,9 @@ def test_imports():
         "telegram": "python-telegram-bot",
         "requests": "requests",
         "bs4": "beautifulsoup4",
-        "openai": "openai",
+        "groq": "groq",
         "dotenv": "python-dotenv",
+        "pandas": "pandas",
     }
     
     all_ok = True
@@ -55,7 +56,6 @@ def test_scraper():
         from scraper import ScreenerScraper
         scraper = ScreenerScraper()
         
-        # Test search
         print("Testing stock search...")
         slug = scraper.search_stock("reliance")
         if slug:
@@ -68,20 +68,34 @@ def test_scraper():
         print(f"❌ Scraper test failed: {e}")
         return False
 
-def test_openai():
-    """Test OpenAI connection."""
-    print("\nTesting OpenAI connection...")
+def test_groq():
+    """Test Groq API connection."""
+    print("\nTesting Groq API connection...")
     try:
-        from openai import OpenAI
-        from config import OPENAI_API_KEY
+        from groq import Groq
+        from config import GROQ_API_KEY
         
-        client = OpenAI(api_key=OPENAI_API_KEY)
-        # Simple test - just check if client initializes
-        print("✅ OpenAI client initialized")
+        if not GROQ_API_KEY:
+            print("❌ Skipped Groq test: API key not found")
+            return False
+        
+        client = Groq(api_key=GROQ_API_KEY)
+        
+        print("Sending test prompt to Groq...")
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": "Say 'Hello' in one word."}],
+            max_tokens=10,
+        )
+        
+        reply = response.choices[0].message.content.strip()
+        print(f"✅ Groq API working. Response: {reply}")
         return True
+        
     except Exception as e:
-        print(f"❌ OpenAI test failed: {e}")
+        print(f"❌ Groq API test failed: {e}")
         return False
+
 
 if __name__ == "__main__":
     print("=" * 50)
@@ -93,10 +107,10 @@ if __name__ == "__main__":
     
     if env_ok and imports_ok:
         scraper_ok = test_scraper()
-        openai_ok = test_openai()
+        groq_ok = test_groq()
         
         print("\n" + "=" * 50)
-        if env_ok and imports_ok and scraper_ok and openai_ok:
+        if env_ok and imports_ok and scraper_ok and groq_ok:
             print("✅ All tests passed! Bot is ready to run.")
             print("Run: python bot.py")
         else:
@@ -106,4 +120,3 @@ if __name__ == "__main__":
         print("\n" + "=" * 50)
         print("❌ Setup incomplete. Please fix the issues above.")
         print("=" * 50)
-
